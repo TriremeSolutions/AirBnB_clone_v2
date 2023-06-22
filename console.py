@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
-import sys
 from models.base_model import BaseModel
-from models.__init__ import storage
+from models import storage
 from models.user import User
 from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
+from datetime import datetime
+import sys
+import shlex
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -20,10 +21,12 @@ class HBNBCommand(cmd.Cmd):
 
     classes = {
                'BaseModel': BaseModel,
-               'User': User, 'Place': Place,
-               'State': State, 'City': City,
+               'User': User,
+               'Place': Place,
+               'State': State,
+               'City': City,
                'Amenity': Amenity,
-               'Review': Review
+               'Review': Review,
               }
 
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
@@ -122,17 +125,67 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
+        """
+        Creates an object of any predefined class:
+        Creates a new instance with given keys and values.
+        Use: create *class* *key1*=*val1* *key2* = *val2* and so on...
+        Prints its id.
+        """
+        
+        # if not args:
+        #     print("** class name missing **")
+        #     return
+        # elif args not in HBNBCommand.classes:
+        #     print("** class doesn't exist **")
+        #     return
+        # new_instance = HBNBCommand.classes[args]()
+        # storage.save()
+        # print(new_instance.id)
+        # storage.save()
+
         if not args:
-            print("** class name missing **")
+            print("**class name missing **")
             return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        #handles absent class argument
+
+        # elif args not in HBNBCommand.classes:
+        #     print("**class doesn't exist**")
+        #     return
+        #handles invalid class argument
+        
+        #checking the remaining argument string since class is valid
+        kwgs_arr = args.split()
+        cl_arg = kwgs_arr[0]
+        kwg = {}
+        #proceed, but skip parsing of the first item, i.e. the valid class
+        for i in range (1, len(kwgs_arr)):
+            if '=' in kwgs_arr[i]:
+                kwg_step = kwgs_arr[i].split("=")
+                #pair k and v, maintain order.
+                k, v = tuple(kwg_step)
+                #nested if: check the format
+                if v[0] == '"':
+                    v = v.strip('"')
+                    #handle underscores if present
+                    v = v.replace("_"," ")
+                else:
+                    #v is probably a number
+                    try:
+                        v = eval(v)
+                    except Exception as e:
+                        continue
+                kwg[k] = v #pair value to key
+
+        if kwg == {}:
+        #implies no k-v pairs passed
+        #proceed as if only class was passed
+            new_instance = HBNBCommand.classes[cl_arg]()
+        else:
+            new_instance = HBNBCommand.classes[cl_arg](**kwg)
+            print(kwg)
+            storage.new(new_instance)
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """

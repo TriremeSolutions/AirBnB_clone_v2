@@ -180,8 +180,9 @@ class HBNBCommand(cmd.Cmd):
 
         if kwg == {}:
             # implies no k-v pairs passed
-            # proceed as if only class was passed
-            new_instance = HBNBCommand.classes[cl_arg]()
+            # class must have a valid k-v pair
+            print("** value missing **") 
+            return
         else:
             new_instance = HBNBCommand.classes[cl_arg](**kwg)
             # print(kwg) -- a minor progress check

@@ -161,7 +161,7 @@ class HBNBCommand(cmd.Cmd):
                 # pair k and v, maintain order.
                 k, v = tuple(kwg_step)
                 # nested if: check the format
-                if v[0] == '"':
+                if v[0] == '"' and v[len(v)-1] =='"':
                     v = v.strip('"')
                     # handle underscores if present
                     v = v.replace("_", " ")
@@ -172,7 +172,7 @@ class HBNBCommand(cmd.Cmd):
                     except Exception as e:
                         continue
                 kwg[k] = v  # pair value to key
-                #print(v) -- a minor progress check
+                # print(v) -- a minor progress check
 
         if cl_arg not in HBNBCommand.classes:
             print("**class doesn't exist**")
@@ -183,10 +183,12 @@ class HBNBCommand(cmd.Cmd):
             # implies no k-v pairs passed
             # class must have a valid k-v pair
             try:
-            # accounts for bad user formatting
+                # accounts for bad user formatting
                 if kwgs_arr[2]:
-                    print("** invalid syntax: {} {}".format(kwgs_arr[1], kwgs_arr[2]))
-            except:
+                    print(
+                        "** bad syntax: {} {}".format(kwgs_arr[1], kwgs_arr[2])
+                        )
+            except Exception as e:
                 if '=' not in kwgs_arr[1]:
                     print('** no value given for: {}'.format(kwgs_arr[1]))
                 elif '=' in kwgs_arr[1]:

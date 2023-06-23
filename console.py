@@ -172,6 +172,7 @@ class HBNBCommand(cmd.Cmd):
                     except Exception as e:
                         continue
                 kwg[k] = v  # pair value to key
+                #print(v) -- a minor progress check
 
         if cl_arg not in HBNBCommand.classes:
             print("**class doesn't exist**")
@@ -181,7 +182,15 @@ class HBNBCommand(cmd.Cmd):
         if kwg == {}:
             # implies no k-v pairs passed
             # class must have a valid k-v pair
-            print("** value missing **") 
+            try:
+            # accounts for bad user formatting
+                if kwgs_arr[2]:
+                    print("** invalid syntax: {} {}".format(kwgs_arr[1], kwgs_arr[2]))
+            except:
+                if '=' not in kwgs_arr[1]:
+                    print('** no value given for: {}'.format(kwgs_arr[1]))
+                elif '=' in kwgs_arr[1]:
+                    print("** invalid syntax: {}".format(kwgs_arr[1]))
             return
         else:
             new_instance = HBNBCommand.classes[cl_arg](**kwg)

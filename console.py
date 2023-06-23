@@ -13,6 +13,7 @@ from datetime import datetime
 import sys
 import shlex
 
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -131,7 +132,7 @@ class HBNBCommand(cmd.Cmd):
         Use: create *class* *key1*=*val1* *key2* = *val2* and so on...
         Prints its id.
         """
-        
+
         # if not args:
         #     print("** class name missing **")
         #     return
@@ -146,45 +147,44 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("**class name missing **")
             return
-        #handles absent class argument
+        # handles absent class argument
 
-        #assume class entry is valid for now
-        #checking the remaining argument string since class is valid
+        # assume class entry is valid for now
+        # checking the remaining argument string since class is valid
         kwgs_arr = args.split()
         cl_arg = kwgs_arr[0]
         kwg = {}
-        #proceed, but skip parsing of the first item, i.e. the valid class
-        for i in range (1, len(kwgs_arr)):
+        # proceed, but skip parsing of the first item, i.e. the valid class
+        for i in range(1, len(kwgs_arr)):
             if '=' in kwgs_arr[i]:
                 kwg_step = kwgs_arr[i].split("=")
-                #pair k and v, maintain order.
+                # pair k and v, maintain order.
                 k, v = tuple(kwg_step)
-                #nested if: check the format
+                # nested if: check the format
                 if v[0] == '"':
                     v = v.strip('"')
-                    #handle underscores if present
-                    v = v.replace("_"," ")
+                    # handle underscores if present
+                    v = v.replace("_", " ")
                 else:
-                    #v is probably a number
+                    # v is probably a number
                     try:
                         v = eval(v)
                     except Exception as e:
                         continue
-                kwg[k] = v #pair value to key
-
+                kwg[k] = v  # pair value to key
 
         if cl_arg not in HBNBCommand.classes:
             print("**class doesn't exist**")
             return
-        #handles invalid class argument
+        # handles invalid class argument
 
         if kwg == {}:
-        #implies no k-v pairs passed
-        #proceed as if only class was passed
+            # implies no k-v pairs passed
+            # proceed as if only class was passed
             new_instance = HBNBCommand.classes[cl_arg]()
         else:
             new_instance = HBNBCommand.classes[cl_arg](**kwg)
-            print(kwg)
+            # print(kwg) -- a minor progress check
             storage.new(new_instance)
         print(new_instance.id)
         new_instance.save()

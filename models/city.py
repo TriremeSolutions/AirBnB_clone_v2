@@ -10,7 +10,7 @@ from sqlalchemy.orm import relationship
 
 
 class City(BaseModel, Base):
-    """ 
+    """
     The city class, contains state ID and name
     Inherits from Base for the MySQL database
     """

@@ -8,6 +8,7 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
 import shlex
+from os import getenv
 
 
 class State(BaseModel, Base):
@@ -22,6 +23,7 @@ class State(BaseModel, Base):
     cities = relationship("City",  backref="state" cascade="delete")
 
     # define the FileStorage relationship with City
+    if getenv("HBNB_TYPE_STORAGE") != "db":
     @property
     def cities(self):
         temp = []

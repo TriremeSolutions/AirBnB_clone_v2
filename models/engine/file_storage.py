@@ -3,12 +3,13 @@
     This module defines the class FileStorage.
 """
 import json
+import shlex
 
 
 class FileStorage:
     """
     This class manages storage of hbnb models in JSON format
-    
+
     Attributes:
         __file_path (str): name of the object saver json file.
         __objects (dict): dictionary storing the objects to be
@@ -18,10 +19,24 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        temp_dict = {}
+        if cls is not None:
+            prior_stored = self.__objects
+            # now, retrieve the key and check whether its a class
+            for k in prior_stored:
+                # separate class from its id in same string
+                search_cl = k.replace('.', ' ')
+                # put class in its own string
+                search_cl = search_cl.split()
+                # check for matching values
+                if (search_cl[0] == cls.__name__):
+                    # create new key, its value is auto assigned
+                    temp_dict[k] = self.__objects[k]
+            return (temp_dict)
         return self.__objects
-    
+
     def new(self, obj):
         """Set in __objects obj with key <obj_class_name>.id."""
         self.__objects["{}.{}".format(type(obj).__name__, obj.id)] = obj
@@ -29,7 +44,6 @@ class FileStorage:
     # def new(self, obj):
     #     """Adds new object to storage dictionary"""
     #     self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
-    
 
     def save(self):
         """
@@ -63,6 +77,15 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """
+        Deletes only an already existing object
+        """
+        if obj is not None:
+            # delete the obj dict having the required key
+            del self.__objects["{}.{}".format(type(obj).
+                                              __name__, obj.id)]

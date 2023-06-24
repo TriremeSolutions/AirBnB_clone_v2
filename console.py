@@ -161,7 +161,7 @@ class HBNBCommand(cmd.Cmd):
                 # pair k and v, maintain order.
                 k, v = tuple(kwg_step)
                 # nested if: check the format
-                if v[0] == '"' and v[len(v)-1] =='"':
+                if v[0] == '"' and v[len(v)-1] == '"':
                     v = v.strip('"')
                     # handle underscores if present
                     v = v.replace("_", " ")

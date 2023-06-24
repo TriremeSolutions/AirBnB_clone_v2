@@ -41,10 +41,6 @@ class FileStorage:
         """Set in __objects obj with key <obj_class_name>.id."""
         self.__objects["{}.{}".format(type(obj).__name__, obj.id)] = obj
 
-    # def new(self, obj):
-    #     """Adds new object to storage dictionary"""
-    #     self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
-
     def save(self):
         """
             Saves to JSON file.

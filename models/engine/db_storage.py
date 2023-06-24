@@ -34,3 +34,57 @@ class DBStorage:
 
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
+    def all(self, cls=None):
+        """
+        Query on the current databse session
+        Queries all types of objects if cls is None.
+
+        Return:
+            A dictionary with k-v format:
+            key: <class name>.<object id>
+            value: object
+        """
+        dict_all = {}
+        if cls:
+            if type(cls) is str:
+                cls = eval(cls)
+            search = self.__session.query(cls)
+            for sc in search:
+                k = "{}.{}".format(type(sc).__name__, sc.id)
+                dict_all[k] = sc
+        else:
+            cl_list = [State, City, Place, User, Amenity, Review]
+            for cl in cl_list:
+                search = self.__session.query(cl)
+                for sc in search:
+                    k = "{}.{}".format(type(sc).__name__, sc.id)
+                    dict_all[k] = sc
+        return (dict_all)
+
+    def new(self, obj):
+        """add the object to the current database session."""
+        self.__session.add(obj)
+
+    def save(self):
+        """commit all changes of the current database session."""
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """delete from the current database session only if:"""
+        if obj is not None:
+            self.__session.delete(obj)
+
+    def reload(self):
+        """
+        create all tables in the database.
+        creates the current database session.
+        """
+        Base.metadata.create_all(self.__engine)
+        # check imports above, ensure Base included
+        this = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(this)
+        self.__session = Session()
+
+    def close(self):
+        """ calls remove()"""
+        self.__session.close()

@@ -133,73 +133,64 @@ class HBNBCommand(cmd.Cmd):
         Prints its id.
         """
 
-        # if not args:
-        #     print("** class name missing **")
-        #     return
-        # elif args not in HBNBCommand.classes:
-        #     print("** class doesn't exist **")
-        #     return
-        # new_instance = HBNBCommand.classes[args]()
-        # storage.save()
-        # print(new_instance.id)
-        # storage.save()
-
+        # handle absent class argument
         if not args:
-            print("**class name missing **")
+            print("** class name missing **")
             return
-        # handles absent class argument
 
-        # assume class entry is valid for now
-        # checking the remaining argument string since class is valid
+        # checking the remaining argument string
         kwgs_arr = args.split()
         cl_arg = kwgs_arr[0]
-        kwg = {}
-        # proceed, but skip parsing of the first item, i.e. the valid class
-        for i in range(1, len(kwgs_arr)):
-            if '=' in kwgs_arr[i]:
-                kwg_step = kwgs_arr[i].split("=")
-                # pair k and v, maintain order.
-                k, v = tuple(kwg_step)
-                # nested if: check the format
-                if v[0] == '"' and v[len(v)-1] == '"':
-                    v = v.strip('"')
-                    # handle underscores if present
-                    v = v.replace("_", " ")
-                else:
-                    # v is probably a number
-                    try:
-                        v = eval(v)
-                    except Exception as e:
-                        continue
-                kwg[k] = v  # pair value to key
-                # print(v) -- a minor progress check
 
+        # handle invalid class
         if cl_arg not in HBNBCommand.classes:
-            print("**class doesn't exist**")
+            print("** class doesn't exist **")
             return
-        # handles invalid class argument
 
+        kwg = {}
+        if len(kwgs_arr) > 1:
+            other_args = kwgs_arr[1]
+        # proceed, but skip parsing of the first item, i.e. the valid class
+            for i in range(1, len(kwgs_arr)):
+                if kwgs_arr[i][-1] == '=':
+                    print('incomplete input')
+                    return
+                if '=' in kwgs_arr[i]:
+                    kwg_step = kwgs_arr[i].split("=")
+                    # pair k and v, maintain order.
+                    k, v = tuple(kwg_step)
+                    # nested if: check the format
+                    if v[0] == '"' and v[len(v)-1] == '"':
+                        v = v.strip('"')
+                        # handle underscores if present
+                        v = v.replace("_", " ")
+                    else:
+                        # v is probably a number
+                        try:
+                            v = eval(v)
+                        except Exception as e:
+                            continue
+                    kwg[k] = v  # pair value to key
+                    # print("freyy {}".format(v)) # a minor progress check
+                    try:
+                        if type(v) is str and v[0] == "":
+                            print('invalid attribute')
+                    except (IndexError):
+                        print('no empty spaces allowed in attribute')
+                        return
+            if kwg == {}:
+                print("Invalid format for attribute entry")
+                return
+
+        # print("yagayee {}".format(kwg)) --minor progress check
         if kwg == {}:
             # implies no k-v pairs passed
-            # class must have a valid k-v pair
-            try:
-                # accounts for bad user formatting
-                if kwgs_arr[2]:
-                    print(
-                        "** bad syntax: {} {}".format(kwgs_arr[1], kwgs_arr[2])
-                        )
-            except Exception as e:
-                if '=' not in kwgs_arr[1]:
-                    print('** no value given for: {}'.format(kwgs_arr[1]))
-                elif '=' in kwgs_arr[1]:
-                    print("** invalid syntax: {}".format(kwgs_arr[1]))
-            return
+            new_instance = HBNBCommand.classes[cl_arg]()
         else:
             new_instance = HBNBCommand.classes[cl_arg](**kwg)
-            # print(kwg) -- a minor progress check
-            storage.new(new_instance)
-        print(new_instance.id)
+        storage.new(new_instance)
         new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """

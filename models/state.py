@@ -2,7 +2,6 @@
 """ State Module for HBNB project """
 from models.base_model import BaseModel
 # update state for SQLAlchemy
-from sqlalchemy.ext.declarative import declarative_base
 from os import getenv
 import models
 from models.base_model import Base
@@ -23,8 +22,8 @@ class State(BaseModel, Base):
                           backref="state")
 
     # representation for FileStorage
-    # if getenv("HBNB_TYPE_STORAGE") != "db":
-    @property
+    if getenv("HBNB_TYPE_STORAGE") != "db":
+        @property
         def cities(self):
             """Retrieves all City objects to a list"""
             # get all city values

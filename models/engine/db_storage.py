@@ -43,21 +43,22 @@ class DBStorage:
             key: <class name>.<object id>
             value: object
         """
-        if cls is None:
-            state_from = self.__session.query(State).all()
-            state_from.extend(self.__session.query(City).all())
-            state_from.extend(self.__session.query(User).all())
-            state_from.extend(self.__session.query(Place).all())
-            state_from.extend(self.__session.query(Review).all())
-            state_from.extend(self.__session.query(Amenity).all())
-        else:
-            if type(cls) == str:
+        dict_all = {}
+        if cls:
+            if type(cls) is str:
                 cls = eval(cls)
-            state_from = self.__session.query(cls)
-        return {
-                "{}.{}"
-                .format(type(st).__name__, st.id): st for st in state_from
-               }
+            search = self.__session.query(cls)
+            for sc in search:
+                k = "{}.{}".format(type(sc).__name__, sc.id)
+                dict_all[k] = sc
+        else:
+            cl_list = [State, City, Place, User, Amenity, Review]
+            for cl in cl_list:
+                search = self.__session.query(cl)
+                for sc in search:
+                    k = "{}.{}".format(type(sc).__name__, sc.id)
+                    dict_all[k] = sc
+        return (dict_all)
 
     def new(self, obj):
         """add the object to the current database session."""

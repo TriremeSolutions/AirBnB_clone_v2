@@ -9,7 +9,7 @@ from sqlalchemy import String
 from sqlalchemy import Column
 
 
-class Review(BaseModel, Base):
+class Review(BaseModel):
     """ Review classto store review information """
     place_id = ""
     user_id = ""

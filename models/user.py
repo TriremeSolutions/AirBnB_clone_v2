@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 """This module defines a class User"""
+from models.base_model import Base
 from models.base_model import BaseModel
 # update user for SQL
-from models.base_model import Base
 from sqlalchemy import Column
 from sqlalchemy import String
-from sqlalchemy.orm import relationship
+# from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):

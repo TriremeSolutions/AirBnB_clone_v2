@@ -54,7 +54,7 @@ class DBStorage:
         else:
             cl_list = [State, City, Place, User, Amenity, Review]
             for cl in cl_list:
-                search = self.__session.query(cl)
+                search = self.__session.query(cl).all()
                 for sc in search:
                     k = "{}.{}".format(type(sc).__name__, sc.id)
                     dict_all[k] = sc

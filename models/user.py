@@ -6,6 +6,7 @@ from sqlalchemy import Column, Integer, String
 # update for Place linking
 from sqlalchemy.orm import relationship
 
+
 class User(BaseModel, Base):
     """
     This class defines a user by various attributes
@@ -16,3 +17,4 @@ class User(BaseModel, Base):
     first_name = Column(String(128))
     last_name = Column(String(128))
     places = relationship("Place", backref="user", cascade="delete")
+    reviews = relationship("Review", backref="user", cascade="delete")

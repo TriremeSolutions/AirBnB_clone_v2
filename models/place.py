@@ -51,7 +51,7 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     review_list.append(review)
             return review_list
-        
+
         @property
         def amenities(self):
             """Fetches linked Amenities"""
@@ -60,7 +60,7 @@ class Place(BaseModel, Base):
                 if amenity.id in self.amenity_ids:
                     list_amenities.append(amenity)
             return list_amenities
-        
+
         @amenities.setter
         def amenities(self, value):
             """

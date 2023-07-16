@@ -15,8 +15,7 @@ def do_pack():
         dt = datetime.utcnow()
         fmt = "%Y%m%d%H%M%S"
         path_gzip = 'versions/web_static_{}.tgz'.format(dt.strftime(fmt))
+        local('tar -cvzf {} web_static'.format(path_gzip))
+        return path_gzip
     except Exception as e:
         return None
-    
-    local('tar -cvzf {} web_static'.format(path_gzip))
-    return path_gzip

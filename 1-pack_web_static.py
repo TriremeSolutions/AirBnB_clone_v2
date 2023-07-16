@@ -12,13 +12,14 @@ def do_pack():
     try:
         dt = datetime.now()
         fmt = "%Y%m%d%H%M%S"
-        path_gzip = "./versions/web_static_{}.tgz".format(dt.strftime(fmt))
+        gzip = "./versions/web_static_{}.tgz".format(dt.strftime(fmt))
         if os.path.isdir("versions") is False:
-            if local("mkdir -p versions").failed is True:
+            if local("sudo mkdir -p versions").failed is True:
                 return None
-        if local("tar -cvzf {} web_static".format(path_gzip)).failed is True:
+        if local("sudo tar -cvzf {} web_static".format(gzip)).failed is True:
             return None
-        return path_gzip
+        local("find ./versions -type f -exec chmod 664 {} \;")
+        return gzip
 
     except Exception as e:
         return None

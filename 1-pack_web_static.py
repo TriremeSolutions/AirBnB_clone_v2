@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ FabScript that archives the contents of a folder """
-import os.path
+import os
 from fabric.api import local
 from datetime import datetime
 

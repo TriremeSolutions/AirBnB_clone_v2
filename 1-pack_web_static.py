@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ FabScript that archives the contents of a folder """
-import os.path
+import os
 from fabric.api import local
 from datetime import datetime
 
@@ -9,13 +9,13 @@ def do_pack():
     """
     Compresses web_static dir to a tar gzip archive.
     """
-
-    dt = datetime.utcnow()
-    fmt = '%Y%m%d%H%M%S'
-    path_gzip = "versions/web_static_{}.tgz".format(dt.strftime(fmt))
-    if os.path.isdir("versions") is False:
-        if local("mkdir -p versions").failed is True:
-            return None
-    if local("tar -cvzf {} web_static".format(file)).failed is True:
+    try:
+        if not os.path.exists("versions"):
+            local('mkdir versions')
+        dt = datetime.utcnow()
+        fmt = "%Y%m%d%H%M%S"
+        path_gzip = 'versions/web_static_{}.tgz'.format(dt.strftime(fmt))
+        local('tar -cvzf {} web_static'.format(path_gzip))
+        return path_gzip
+    except:
         return None
-    return path_gzip

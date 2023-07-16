@@ -11,7 +11,7 @@ def do_pack():
     """
     try:
         if not os.path.exists("versions"):
-            local('mkdir versions')
+            local('mkdir -p versions')
         dt = datetime.utcnow()
         fmt = "%Y%m%d%H%M%S"
         path_gzip = 'versions/web_static_{}.tgz'.format(dt.strftime(fmt))

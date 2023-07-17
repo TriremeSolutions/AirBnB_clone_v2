@@ -18,4 +18,3 @@ def do_pack():
     if local("tar -cvzf {} web_static".format(path_gzip)).failed is True:
         return None
     return
-

@@ -12,7 +12,6 @@ def do_pack():
     dt = datetime.utcnow()
     fmt = "%Y%m%d%H%M%S"
     path_gzip = 'versions/web_static_{}.tgz'.format(dt.strftime(fmt))
-    local("rm -r ./versions")
     if os.path.isdir("versions") is False:
         if local("mkdir -p versions").failed is True:
             return None

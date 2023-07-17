@@ -16,7 +16,7 @@ def do_deploy(archive_path):
         return False
     try:
         gzip = archive_path.replace('/', ' ')
-        gzip = shlex.split(name)
+        gzip = shlex.split(gzip)
         gzip = gzip[-1]
         xid = gzip.replace('.', ' ')
         xid = shlex.split(xid)

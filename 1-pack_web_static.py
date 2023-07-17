@@ -17,4 +17,4 @@ def do_pack():
             return None
     if local("tar -cvzf {} web_static".format(path_gzip)).failed is True:
         return None
-    return path_gzip
+    return ('./versions/web_static_{}.tgz'.format(dt.strftime(fmt)))

@@ -13,7 +13,7 @@ def do_pack():
     fmt = "%Y%m%d%H%M%S"
     path_gzip = "./versions/web_static_{}.tgz".format(dt.strftime(fmt))
     if os.path.isdir("versions") is False:
-        if local("mkdir -p versions").failed is True:
+        if local("mkdir versions").failed is True:
             return None
     if local("tar -cvzf {} web_static".format(path_gzip)).failed is True:
         return None

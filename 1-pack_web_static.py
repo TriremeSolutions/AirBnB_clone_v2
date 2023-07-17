@@ -9,16 +9,12 @@ def do_pack():
     """
     Compresses web_static dir to a tar gzip archive.
     """
-    try:
-        dt = datetime.now()
-        fmt = "%Y%m%d%H%M%S"
-        path_gzip = "./versions/web_static_{}.tgz".format(dt.strftime(fmt))
-        if os.path.isdir("versions") is False:
-            if local("mkdir -p versions").failed is True:
-                return None
-        if local("tar -cvzf {} web_static".format(path_gzip)).failed is True:
+    dt = datetime.now()
+    fmt = "%Y%m%d%H%M%S"
+    path_gzip = "./versions/web_static_{}.tgz".format(dt.strftime(fmt))
+    if os.path.isdir("versions") is False:
+        if local("mkdir -p versions").failed is True:
             return None
-        return path_gzip
-
-    except Exception as e:
+    if local("tar -cvzf {} web_static".format(path_gzip)).failed is True:
         return None
+    return path_gzip

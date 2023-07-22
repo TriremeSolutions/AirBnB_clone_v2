@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """ Function that deploys content of an archive """
-import os
 from datetime import datetime
 from fabric.api import env
 from fabric.api import put
 from fabric.api import run
+import os.path
 import shlex
 
 env.hosts = ['100.26.244.129', '52.204.216.209']

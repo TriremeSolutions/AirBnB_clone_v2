@@ -71,6 +71,11 @@ file { '/etc/nginx/sites-available/default':
   content => $nginx_config
 } ->
 
+file { '/var/www/html/404.html':
+  ensure  => 'present',
+  content => "Ceci n'est pas une page\n"
+} ->
+
 exec {'restart Nginx':
   provider => shell,
   command  => 'sudo service nginx restart',

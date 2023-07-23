@@ -6,6 +6,7 @@ from fabric.api import env
 from fabric.api import put
 from fabric.api import run
 import os.path
+from os.path import isdir
 
 
 def do_pack():
@@ -21,6 +22,7 @@ def do_pack():
     if local("tar -cvzf {} web_static".format(gzip)).failed is True:
         return None
     return gzip
+
 
 def do_deploy(archive_path):
     """ Search and deploy archive to server """
@@ -55,6 +57,7 @@ def do_deploy(archive_path):
            format(capt)).failed is True:
         return False
     return True
+
 
 def deploy():
     """

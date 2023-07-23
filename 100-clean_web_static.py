@@ -13,7 +13,7 @@ def do_clean(number=0):
     number is the number of the archives, including the most recent, to keep
 
     If number is 0 or 1, keep only the most recent version of your archive.
-    if number is 2, keep the most recent, and second most recent versions of your archive.
+    if number is 2, keep the most recent, and second most recent version
     if number is 3, keep the 3 most recent archives... etc.
     """
 

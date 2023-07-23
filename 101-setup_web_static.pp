@@ -1,6 +1,52 @@
 # Puppet script to configure Nginx server similarly
 
-# Configuration
+exec {'update':
+  provider => shell,
+  command  => 'sudo apt-get -y update',
+  before   => Exec['install Nginx'],
+}
+
+exec {'install Nginx':
+  provider => shell,
+  command  => 'sudo apt-get -y install nginx',
+  before   => Exec['start Nginx'],
+}
+
+exec {'start Nginx':
+  provider => shell,
+  command  => 'sudo service nginx start',
+  before   => Exec['create first directory'],
+}
+
+exec {'create first directory':
+  provider => shell,
+  command  => 'sudo mkdir -p /data/web_static/releases/test/',
+  before   => Exec['create second directory'],
+}
+
+exec {'create second directory':
+  provider => shell,
+  command  => 'sudo mkdir -p /data/web_static/shared/',
+  before   => Exec['content into html'],
+}
+
+exec {'content into html':
+  provider => shell,
+  command  => 'echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html',
+  before   => Exec['symbolic link'],
+}
+
+exec {'symbolic link':
+  provider => shell,
+  command  => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
+  before   => Exec['put location'],
+}
+
+exec { 'chown -R ubuntu:ubuntu /data/':
+  path => '/usr/bin/:/usr/local/bin/:/bin/'
+}
+
+# Configuration NGINX
 $nginx_config = "server {
     listen 80 default_server;
     listen [::]:80 default_server;
@@ -14,7 +60,7 @@ $nginx_config = "server {
     }
 
     location /redirect_me {
-        return 301 http://cuberule.com/;
+        return 301 http://github.com/;
     }
 
     error_page 404 /404.html;
@@ -24,56 +70,9 @@ $nginx_config = "server {
     }
 }"
 
-package { 'nginx':
-  ensure   => 'present',
-  provider => 'apt'
-} ->
-
-file { '/data':
-  ensure  => 'directory'
-} ->
-
-file { '/data/web_static':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/releases':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/releases/test':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/shared':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/releases/test/index.html':
+file { '/etc/nginx/sites-available/default':
   ensure  => 'present',
-  content => "Holberton School Puppet\n"
-} ->
-
-file { '/data/web_static/current':
-  ensure => 'link',
-  target => '/data/web_static/releases/test'
-} ->
-
-exec { 'chown -R ubuntu:ubuntu /data/':
-  path => '/usr/bin/:/usr/local/bin/:/bin/'
-}
-
-file { '/var/www':
-  ensure => 'directory'
-} ->
-
-file { '/var/www/html':
-  ensure => 'directory'
-} ->
-
-file { '/var/www/html/index.html':
-  ensure  => 'present',
-  content => "Holberton School Nginx\n"
+  content => $nginx_config
 } ->
 
 file { '/var/www/html/404.html':
@@ -81,11 +80,15 @@ file { '/var/www/html/404.html':
   content => "Ceci n'est pas une page\n"
 } ->
 
-file { '/etc/nginx/sites-available/default':
-  ensure  => 'present',
-  content => $nginx_conf
-} ->
+exec {'restart Nginx':
+  provider => shell,
+  command  => 'sudo service nginx restart',
+  before   => File['/data/']
+}
 
-exec { 'nginx restart':
-  path => '/etc/init.d/'
+file {'/data/':
+  ensure  => directory,
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  recurse => true,
 }

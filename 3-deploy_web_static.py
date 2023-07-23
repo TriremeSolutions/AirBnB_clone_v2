@@ -8,6 +8,8 @@ from fabric.api import run
 import os.path
 from os.path import isdir
 
+env.hosts = ['100.26.244.129', '52.204.216.209']
+
 
 def do_pack():
     """

@@ -9,36 +9,22 @@ import os.path
 from os.path import isdir
 
 env.hosts = ['100.26.244.129', '52.204.216.209']
+env.user = "ubuntu"
 
-
-# def do_pack():
-#     """
-#     Compresses web_static dir to a tar gzip archive.
-#     """
-#     dt = datetime.utcnow()
-#     fmt = "%Y%-m%-d%-H%-M%-S"
-#     gzip = 'versions/web_static_{}.tgz'.format(dt.strftime(fmt))
-#     if isdir("versions") is False:
-#         if local("mkdir -p versions").failed is True:
-#             return None
-#     if local("tar -cvzf {} web_static".format(gzip)).failed is True:
-#         return None
-#     return gzip
 
 def do_pack():
     """
     Compresses web_static dir to a tar gzip archive.
     """
-    try:
-        if not os.path.exists("versions"):
-            local('mkdir versions')
-        dt = datetime.utcnow()
-        fmt = "%Y%-m%-d%-H%-M%-S"
-        gzip = 'versions/web_static_{}.tgz'.format(dt.strftime(fmt))
-        local('tar -cvzf {} web_static'.format(gzip))
-        return gzip
-    except Exception as e:
+    dt = datetime.utcnow()
+    fmt = "%Y%-m%-d%-H%-M%-S"
+    gzip = 'versions/web_static_{}.tgz'.format(dt.strftime(fmt))
+    if isdir("versions") is False:
+        if local("mkdir -p versions").failed is True:
+            return None
+    if local("tar -cvzf {} web_static".format(gzip)).failed is True:
         return None
+    return gzip
 
 
 def do_deploy(archive_path):

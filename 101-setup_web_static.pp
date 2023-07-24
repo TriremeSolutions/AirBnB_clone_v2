@@ -80,6 +80,15 @@ file { '/var/www/html/404.html':
   content => "Ceci n'est pas une page\n"
 } ->
 
-exec { 'nginx restart':
-  path => '/etc/init.d/'
+exec {'restart Nginx':
+  provider => shell,
+  command  => 'sudo service nginx restart',
+  before   => File['/data/']
+}
+
+file {'/data/':
+  ensure  => directory,
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  recurse => true,
 }

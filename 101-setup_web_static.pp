@@ -1,5 +1,29 @@
 # Puppet script to configure Nginx server similarly
 
+# Configuration
+$nginx_config = "server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    add_header X-Served-By ${hostname};
+    root   /var/www/html;
+    index  world.html world.htm;
+
+    location /hbnb_static {
+        alias /data/web_static/current;
+        index world.html world.htm;
+    }
+
+    location /redirect_me {
+        return 301 http://github.com/;
+    }
+
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+}"
+
 package { 'nginx':
   ensure   => 'present',
   provider => 'apt'
@@ -56,30 +80,6 @@ file { '/var/www/html/404.html':
   ensure  => 'present',
   content => "Ceci n'est pas une page\n"
 } ->
-
-# Configuration
-$nginx_config = "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    add_header X-Served-By ${hostname};
-    root   /var/www/html;
-    index  world.html world.htm;
-
-    location /hbnb_static {
-        alias /data/web_static/current;
-        index world.html world.htm;
-    }
-
-    location /redirect_me {
-        return 301 http://github.com/;
-    }
-
-    error_page 404 /404.html;
-    location /404 {
-      root /var/www/html;
-      internal;
-    }
-}"
 
 file { '/etc/nginx/sites-available/default':
   ensure  => 'present',

@@ -30,6 +30,10 @@ exec {'create second directory':
   before   => Exec['content into html'],
 }
 
+exec { 'chown -R ubuntu:ubuntu /data/':
+  path => '/usr/bin/:/usr/local/bin/:/bin/'
+}
+
 exec {'content into html':
   provider => shell,
   command  => 'echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html',
@@ -40,10 +44,6 @@ exec {'symbolic link':
   provider => shell,
   command  => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
   before   => Exec['put location'],
-}
-
-exec { 'chown -R ubuntu:ubuntu /data/':
-  path => '/usr/bin/:/usr/local/bin/:/bin/'
 }
 
 # Configuration NGINX
@@ -80,15 +80,6 @@ file { '/var/www/html/404.html':
   content => "Ceci n'est pas une page\n"
 } ->
 
-exec {'restart Nginx':
-  provider => shell,
-  command  => 'sudo service nginx restart',
-  before   => File['/data/']
-}
-
-file {'/data/':
-  ensure  => directory,
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
-  recurse => true,
+exec { 'nginx restart':
+  path => '/etc/init.d/'
 }

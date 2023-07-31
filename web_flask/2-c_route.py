@@ -17,6 +17,7 @@ def hbnb():
     """displays text 'HBNB'"""
     return "HBNB"
 
+
 @app.route("/c/<text>", strict_slashes=False)
 def c(text):
     """displays 'C' and the <text> input value."""

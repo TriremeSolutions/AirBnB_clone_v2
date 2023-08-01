@@ -8,7 +8,7 @@
         <H1>States</H1>
         <UL>
         {% for n in state.values()|sort(attribute="name") %}
-            <LI>{{n.id}}: <B>{{n.name}}</B></LI>
+            <LI>{{ n.id }}: <B>{{ n.name }}</B></LI>
         {% endfor %}
         </UL>
     {% elif state is defined %}

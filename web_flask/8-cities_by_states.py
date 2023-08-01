@@ -8,7 +8,7 @@ from flask import render_template
 app = Flask(__name__)
 
 
-@app.route("/states_list", strict_slashes=False)
+@app.route("/cities_by_states", strict_slashes=False)
 def cities_by_states():
     """
     displays HTML page with list of States and their

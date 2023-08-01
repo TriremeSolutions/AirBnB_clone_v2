@@ -8,7 +8,7 @@ from flask import render_template
 app = Flask(__name__)
 
 
-@app.route("/states_list", strict_slashes=False)
+@app.route("/states", strict_slashes=False)
 def states():
     """
     displays HTML page with list of States
@@ -26,7 +26,7 @@ def states_id(id):
     for state in storage.all("State").values():
         if state.id == id:
             return render_template("9-states.html", state=state)
-    return render_template("9-states.html") 
+    return render_template("9-states.html")
 
 
 @app.teardown_appcontext

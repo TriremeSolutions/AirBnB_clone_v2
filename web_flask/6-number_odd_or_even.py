@@ -52,7 +52,7 @@ def number_odd_or_even(n):
     displays HTML if <n> is integer
     declares if n is even or odd
     """
-    return render_template('6-number_odd_or_even.html', number=n)
+    return render_template('6-number_odd_or_even.html', n=n)
 
 
 if __name__ == "__main__":

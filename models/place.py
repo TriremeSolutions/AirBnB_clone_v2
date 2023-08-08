@@ -38,7 +38,7 @@ class Place(BaseModel, Base):
     amenity_ids = []
     # for db storage
     amenities = relationship("Amenity", secondary="place_amenity",
-                             viewonly=False)
+                             viewonly=False, overlaps="place_amenities")
     reviews = relationship("Review", backref="place", cascade="delete")
 
     # for fileStorage

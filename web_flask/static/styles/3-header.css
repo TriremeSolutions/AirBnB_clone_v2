@@ -6,13 +6,9 @@ header {
 	border-bottom: 1px solid #CCCCCC;
 }
 
-#header_logo {
+header .logo {
 	height: 100%;
-	width: 142px;
-
+	/* width: 142px; */
 	background-image: url("../images/logo.png");
 	background-repeat: no-repeat;
-	background-position: center;
-
-	margin-left: 20px;
 }
